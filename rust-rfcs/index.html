@@ -3,6 +3,7 @@
   <title>Rust RFC viewer</title>
 </head>
 <body>
+  <ul>
  <script>
  var request = new XMLHttpRequest();
   request.open('GET', 'https://api.github.com/repos/rust-lang/rfcs/contents/text', true);
@@ -12,8 +13,7 @@
       // Success!
       var data = JSON.parse(this.response);
       data.forEach(function (rfc) {
-        document.write(rfc.name);
-        document.write("<br>");
+        document.write("<li><a href=\"" + rfc.download_url + "\">" + rfc.name + "</a></li>");
       });
     } else {
       // We reached our target server, but it returned an error
@@ -27,5 +27,6 @@
   
   request.send();
   </script>
+  </ul>
 </body>
 </html>

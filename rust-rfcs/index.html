@@ -1,0 +1,30 @@
+<html>
+<head>
+  <title>Rust RFC viewer</title>
+</head>
+<body>
+ <script>
+ var request = new XMLHttpRequest();
+  request.open('GET', 'https://api.github.com/repos/rust-lang/rfcs/contents/text', true);
+  
+  request.onload = function() {
+    if (this.status >= 200 && this.status < 400) {
+      // Success!
+      var data = JSON.parse(this.response);
+      data.forEach(function (rfc) {
+        document.write(rfc.name);
+        document.write("<br>");
+      });
+    } else {
+      // We reached our target server, but it returned an error
+  
+    }
+  };
+  
+  request.onerror = function() {
+    // There was a connection error of some sort
+  };
+  
+  request.send();
+</body>
+</html>

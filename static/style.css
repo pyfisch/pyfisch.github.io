@@ -1,0 +1,110 @@
+@font-face {
+  font-family: Charter;
+  font-variant: normal;
+  font-style: normal;
+  src: url("charter_regular.woff");
+}
+
+@font-face {
+  font-family: Charter;
+  font-weight: bold;
+  src: url("charter_bold.woff");
+}
+
+@font-face {
+  font-family: Charter;
+  font-style: italic;
+  src: url("charter_italic.woff");
+}
+
+@font-face {
+  font-family: Source Code Pro;
+  src: url("source_code_pro_medium.woff");
+}
+
+@font-face {
+  font-family: Source Code Pro;
+  font-weight: bold;
+  src: url("source_code_pro_bold.woff");
+}
+
+body {
+  width: 860px;
+  margin: 0 auto;
+}
+
+body > header {
+  margin-bottom: 30px;
+}
+
+body > header > h1 {
+  font-family: Source Code Pro;
+  font-size: 20px;
+  margin-left: 50px;
+}
+
+article {
+  font-family: Charter;
+  font-size: 23px;
+  line-height: 1.30;
+  hyphens: auto;
+}
+
+header > h1 {
+  margin-bottom: 0px;
+  font-weight: bold;
+  font-size: 120%;
+}
+
+header > p {
+  margin-top: 0;
+  font-size: 80%;
+}
+
+h2 {
+  font-weight: bold;
+  font-size: 110%;
+}
+
+p {
+  margin-bottom: 1em;
+}
+
+code {
+  font-family: Source Code Pro;
+  font-size: 90%;
+}
+
+pre {
+  font-family: Source Code Pro;
+  font-size: 80%;
+}
+
+figure {
+  float: right;
+  margin-left: 20px;
+  margin-right: 0px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 400px;
+}
+
+@media (min-width: 1300px) {
+  figure {
+    margin-right: -200px;
+  }
+}
+
+figcaption {
+  font-size: 80%;
+}
+
+a {
+  color: #222222;
+}
+
+footer {
+  font-family: Source Code Pro;
+  text-align: center;
+  margin-top: 50px;
+}

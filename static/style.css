@@ -28,83 +28,152 @@
   src: url("source_code_pro_bold.woff");
 }
 
-body {
-  width: 860px;
-  margin: 0 auto;
-}
-
 body > header {
   margin-bottom: 30px;
 }
 
-body > header > h1 {
+body > header h1 {
   font-family: Source Code Pro;
-  font-size: 20px;
+  font-size: 95%;
   margin-left: 50px;
+  text-decoration: none;
+}
+
+body > header a {
+  text-decoration: none;
+  color: black;
+}
+
+body > footer {
+  font-family: Source Code Pro;
+  font-size: 80%;
+  text-align: center;
+  margin-top: 60px;
+  margin-bottom: 30px;
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  color: #222;
+}
+
+a:visited {
+  color: #555;
+}
+
+a:hover {
+  color: #008;
+}
+
+main > footer {
+  margin-top: 40px;
+  font-family: Source Code Pro;
+  text-align: center;
+  font-size: 90%;
 }
 
 article {
   font-family: Charter;
-  font-size: 23px;
   line-height: 1.30;
   hyphens: auto;
+  color: black;
 }
 
-header > h1 {
+article h1, h2, h3 {
+  font-weight: bold;
+}
+
+article h1 {
+  font-size: 120%;
+}
+
+article h2 {
+  font-size: 110%;
+}
+
+article h3 {
+  font-size: 100%;
+}
+
+article p {
+  margin-bottom: 1em;
+}
+
+article code, pre {
+  font-family: Source Code Pro;
+}
+
+article code {
+  font-size: 90%;
+}
+
+article pre {
+  font-size: 80%;
+}
+
+article img {
+  max-width: 90vw;
+}
+
+article figure {
+  margin: 0 auto;
+  width: 400px;
+  max-width: 90vw;
+  font-size: 80%
+}
+
+article header h1 {
   margin-bottom: 0px;
   font-weight: bold;
   font-size: 120%;
 }
 
-header > p {
+article header p {
   margin-top: 0;
   font-size: 80%;
 }
 
-h2 {
-  font-weight: bold;
-  font-size: 110%;
-}
+@media all {
+  body {
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 18px;
+  }
 
-p {
-  margin-bottom: 1em;
-}
-
-code {
-  font-family: Source Code Pro;
-  font-size: 90%;
-}
-
-pre {
-  font-family: Source Code Pro;
-  font-size: 80%;
-}
-
-figure {
-  float: right;
-  margin-left: 20px;
-  margin-right: 0px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  width: 400px;
-}
-
-@media (min-width: 1300px) {
-  figure {
-    margin-right: -200px;
+  article pre {
+    overflow-x: scroll;
   }
 }
 
-figcaption {
-  font-size: 80%;
+@media all and (min-width: 650px) {
+  body {
+    font-size: 20px;
+  }
+
+  article figure {
+    float: right;
+    margin: 10px 10px 10px 20px;
+  }
 }
 
-a {
-  color: #222222;
+@media all and (min-width: 900px) {
+  body {
+    width: 860px;
+    margin: 0 auto;
+  }
+
+  article pre {
+    overflow-x: visible;
+  }
 }
 
-footer {
-  font-family: Source Code Pro;
-  text-align: center;
-  margin-top: 50px;
+@media all and (min-width: 1300px) {
+  body {
+    font-size: 23px;
+  }
+
+  article figure {
+    margin-right: -200px;
+  }
 }

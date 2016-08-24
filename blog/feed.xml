@@ -111,7 +111,7 @@ test if a resource would block, it also reduces rightward shift.&lt;/li&gt;
 &lt;p&gt;The next protocol I am going to implement will be more complex (really!) than
 echo but it will be a fun task to do it with tokio.&lt;/p&gt;
 &lt;p&gt;By the way this is my first blog post, please write suggestions to improve this
-text on Reddit.&lt;/p&gt;
+text on &lt;a href=&quot;https://www.reddit.com/r/rust/comments/4z2aa3/a_tokio_echo_server_in_35_lines/&quot;&gt;Reddit&lt;/a&gt;.&lt;/p&gt;
 &lt;h2&gt;Update&lt;/h2&gt;
 &lt;p&gt;As Carl Lerche &lt;a href=&quot;https://www.reddit.com/r/rust/comments/4z2aa3/a_tokio_echo_server_in_35_lines/d6sc9jx&quot;&gt;commented  on Reddit&lt;/a&gt; the Echo server should not use
 &lt;code&gt;write_all()&lt;/code&gt; because tokio may raise a &lt;code&gt;WouldBlock&lt;/code&gt; error while writing the message.

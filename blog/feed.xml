@@ -156,6 +156,7 @@ the pending value. If there are pending bytes the server tries to write them to 
  The range of the remaining pending bytes is updated. If the stream would block the function
 returns. &lt;code&gt;tick&lt;/code&gt; will be called again when the stream is unblocked again. If there are zero bytes
 read the connection was closed and &lt;code&gt;Tick::Final&lt;/code&gt; tells tokio that it should remove the task.&lt;/p&gt;
+&lt;p&gt;Obviously the code is now a bit longer than 35 lines, but at least it is correct. ☺&lt;/p&gt;
 &lt;h2&gt;The complete code&lt;/h2&gt;
 &lt;p&gt;This is the updated version of the code without &lt;code&gt;write_all()&lt;/code&gt;.&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;extern&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;crate&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tokio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;&lt;/span&gt;

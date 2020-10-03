@@ -6,15 +6,90 @@
   <link rel="stylesheet" href="../static/normalize.css">
   <link rel="stylesheet" href="../static/style.css">
   <link rel="stylesheet" href="../static/pygments.css">
-  <link rel="alternate" type="application/atom+xml" href="/blog/feed.xml" title="Pyfisch’s blog">
+  <link rel="shortcut icon" type="image/svg" href="/favicon.svg">
+  <link rel="alternate" type="application/atom+xml" href="/blog/feed.xml" title="Pyfisch’s Blog">
   <title>Pyfisch’s Blog</title>
 </head>
 <body>
+  
   <header>
-    <h1><a href="/blog">Pyfisch’s Blog</a></h1>
+    <a href="/">Pyfisch’s Website</a> &gt; <a href="/blog/">Blog</a>
   </header>
   <main>
     
+  
+    
+  <article>
+  <header>
+    
+      <h1><a href="../blog/http-datetime-handling/">HTTP Date/Time Handling</a></h1>
+    
+    <p>
+      written by
+        Pyfisch
+      on <time datetime="2016-12-23">2016-12-23</time>
+    </p>
+  </header>
+  <p><strong>TL;DR</strong>: I’ve written a <a href="https://crates.io/crates/httpdate"><em>httpdate</em></a>
+crate to parse and format dates found in HTTP. It has no dependencies and uses
+<a href="https://doc.rust-lang.org/std/time/struct.SystemTime.html"><code>std::time::SystemTime</code></a> to store all times.</p>
+<p>HTTP communicates some timestamps. To do this it uses an old format called
+IMF-fixdate: <code>Sat, 15 Oct 2016 11:48:13 GMT</code>. (For compatibility with ancient
+endpoints it supports parsing two more formats.) While Rust has the excellent
+<a href="https://crates.io/crates/chrono"><em>chrono</em></a> crate and the deprecated but usable <a href="https://crates.io/crates/time"><em>time</em></a> crate (chrono still
+depends on it) for time handling they are both overkill for the task. These
+crates do a lot of things that are generally useful if you work with dates but
+in this case are not needed like timezones, extensive formatting and parsing
+methods and a lot more.</p>
+<figure>
+<img src="/blog/http-datetime-handling/snowshill_nychthemeron_clock.jpg" width="400">
+<figcaption>An old 24 hour clock. Parsing HTTP dates is a trivial task compared to building a clock. <small>By DeFacto
+    <a href="http://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>,
+    via <a href="https://commons.wikimedia.org/wiki/File:Snowshill_nychthemeron_clock.jpg">Wikimedia Commons</a></small>
+</figcaption>
+</figure><p>I wrote a small crate called <a href="https://crates.io/crates/httpdate"><em>httpdate</em></a> to parse a timestamp to a
+<a href="https://doc.rust-lang.org/std/time/struct.SystemTime.html"><code>std::time::SystemTime</code></a> and format it as required for HTTP. It is both less code
+(more then ten thousand lines vs about 300 lines) so it compiles in an instant
+and it is faster because it is written specially for HTTP timestamps (not that 
+it would matter in normal use but some micro-benchmarks will be faster).</p>
+<h2>Usage</h2>
+<p>Using <em>httpdate</em> is very straightforward:</p>
+<p>With <code>parse_http_date(s: &amp;str) -&gt; Result&lt;SystemTime, ()&gt;</code> a date from HTTP is parsed.
+The function tries to parse the string in all supported formats.
+With <code>fmt_http_date(d: SystemTime) -&gt; String</code> a system time is formatted
+to an IMF-fixdate.</p>
+<h2>Using <code>std::time::SystemTime</code></h2>
+<p>Rusts standard system time is used to store the timestamps from HTTP internally.
+From the documentation:</p>
+<blockquote><p>Although a <code>SystemTime</code> cannot be directly inspected, the <code>UNIX_EPOCH</code>
+constant is provided in this module as an anchor in time to learn information
+about a <code>SystemTime</code>. By calculating the duration from this fixed point in
+time, a <code>SystemTime</code> can be converted to a human-readable time, or perhaps
+some other string representation.</p>
+</blockquote>
+<p>To use a <code>SystemTime</code> I first convert it to the number of seconds since the
+epoch (sub seconds are discarded in HTTP):</p>
+<div class="highlight"><pre><span></span><span class="kd">let</span><span class="w"> </span><span class="n">secs_since_epoch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="c1">// the system time</span>
+<span class="w">  </span><span class="p">.</span><span class="n">duration_since</span><span class="p">(</span><span class="n">UNIX_EPOCH</span><span class="p">)</span><span class="w"> </span><span class="c1">// get the duration from the epoch</span>
+<span class="w">  </span><span class="p">.</span><span class="n">unwrap</span><span class="p">()</span><span class="w"> </span><span class="c1">// Dates prior to 1970 are not expected</span>
+<span class="w">            </span><span class="c1">// common HTTP are either the current date,</span>
+<span class="w">            </span><span class="c1">// last-modified dates or events in the future</span>
+<span class="w">            </span><span class="c1">// like cache expiration.</span>
+<span class="w">            </span><span class="c1">// Only if you do time-travel you may have problems.</span>
+<span class="w">  </span><span class="p">.</span><span class="n">as_secs</span><span class="p">();</span><span class="w"> </span><span class="c1">// Convert the duration to an integer.</span>
+</pre></div>
+<p>A <code>SystemTime</code> is constructed by adding a duration to the epoch:</p>
+<div class="highlight"><pre><span></span><span class="kd">let</span><span class="w"> </span><span class="n">time</span><span class="o">:</span><span class="w"> </span><span class="n">SystemTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UNIX_EPOCH</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Duration</span><span class="o">::</span><span class="n">from_secs</span><span class="p">(</span><span class="mi">1482490056</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+<h2>Internals</h2>
+<p>The crate converts strings to an internal <code>DateTime</code> struct first. This structure has
+fields for time (second, minute, hour) and date (day, month, year, day of week). The
+result is then <a href="https://github.com/pyfisch/httpdate/blob/master/src/datetime.rs#L70-L97">converted to a <code>SystemTime</code></a>.  To get a HTTP date from a <code>SystemTime</code>
+the above steps are applied the other way, but <a href="https://github.com/pyfisch/httpdate/blob/master/src/datetime.rs#L24-L66">calculating the day for a given moment</a>
+is more compex.</p>
+
+  </article>
+
   
     
   <article>
@@ -250,6 +325,7 @@ read the connection was closed and <code>Tick::Final</code> tells tokio that it 
 
 
   </main>
+  
   <footer>
     &copy; 2016 by Pyfisch.
   </footer>

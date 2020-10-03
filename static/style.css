@@ -28,32 +28,43 @@
   src: url("source_code_pro_bold.woff");
 }
 
-body > header {
-  margin-bottom: 30px;
-}
-
-body > header h1 {
+body > header, .intro > header {
+  margin: 15px auto 30px 50px;
   font-family: Source Code Pro;
   font-size: 95%;
-  margin-left: 50px;
+  font-weight: bold;
   text-decoration: none;
 }
 
-body > header a {
+.intro > header {
+  float: left;
+}
+
+.intro > header a, body > header a, body > header a:visited {
   text-decoration: none;
   color: black;
 }
 
+.intro > header a:hover, body > header a:hover {
+  color: dimgrey;
+}
+
+.mascot {
+  border-radius: 15px;
+  max-width: 90vw;
+  margin: 10px;
+  float: right;
+}
+
 body > footer {
-  font-family: Source Code Pro;
+  font-family: Charter;
   font-size: 80%;
   text-align: center;
-  margin-top: 60px;
+  margin-top: 70px;
   margin-bottom: 30px;
 }
 
 a {
-  color: inherit;
   text-decoration: underline;
   color: #222;
 }
@@ -67,17 +78,23 @@ a:hover {
 }
 
 main > footer {
-  margin-top: 40px;
-  font-family: Source Code Pro;
+  margin-top: 50px;
+  font-family: Charter;
   text-align: center;
   font-size: 90%;
 }
 
-article {
+.intro header {
+  font-size: 120%;
+  line-height: 1.50;
+}
+
+article, main {
   font-family: Charter;
   line-height: 1.30;
   hyphens: auto;
   color: black;
+  margin-bottom: 70px;
 }
 
 article h1, h2, h3 {
@@ -141,8 +158,22 @@ article header p {
     font-size: 18px;
   }
 
+  .intro > p {
+    clear: both;
+  }
+
   article pre {
     overflow-x: scroll;
+  }
+}
+
+@media all and (min-width: 400px) {
+  .intro > p {
+    clear: left;
+  }
+
+  .mascot {
+    max-width: 50vw;
   }
 }
 
@@ -154,6 +185,10 @@ article header p {
   article figure {
     float: right;
     margin: 10px 10px 10px 20px;
+  }
+
+  .intro {
+    margin-top: 100px;
   }
 }
 

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2017 by anonymous (http://jsbin.com/gofufewara/1/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+<style id="jsbin-css">
+#scroll {
+  width: 300px;
+  height: 200px;
+  overflow: scroll;
+}
+
+#inner {
+  width: 1000px;
+  height: 800px;
+  background: linear-gradient(45deg, red, green, blue, yellow)
+}
+
+#bottom {
+  width: 1000px;
+  height: 1000px;
+  background: blue;
+}
+
+#status {
+  position: fixed;
+  top: 30px;
+  right: 40px;
+}
+
+</style>
+</head>
+<body>
+  <div id="scroll">
+    <div id="inner"></div>
+  </div>
+  <div id="status"></div>
+  <ul>
+    <li>Left: <input id="scrollleft">
+    <li>Top: <input id="scrolltop">
+  </ul>
+  <div id="bottom"></div>
+<script id="jsbin-javascript">
+window.onload = () => {
+  let scroll = document.getElementById("scroll");
+  let left = document.getElementById("scrollleft");
+  let top = document.getElementById("scrolltop");
+  let status = document.getElementById("status");
+  let inner = document.getElementById("inner");
+  let root = document.documentElement;
+  left.oninput = (e) => {
+    scroll.scrollLeft = left.value;
+  };
+  top.oninput = (e) => {
+    scroll.scrollTop = top.value;
+  };
+
+
+  window.setInterval(function(){
+    status.innerHTML = `
+      scroll: ${scroll.scrollLeft}, ${scroll.scrollTop};<br>
+      root: ${root.scrollLeft}, ${root.scrollTop};<br>
+      inner: ${inner.scrollLeft}, ${inner.scrollTop}`;
+  }, 100);
+
+
+}
+</script>
+</body>
+</html>

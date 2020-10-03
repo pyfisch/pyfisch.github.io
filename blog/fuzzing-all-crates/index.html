@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../static/normalize.css">
+  <link rel="stylesheet" href="../../static/style.css">
+  <link rel="stylesheet" href="../../static/pygments.css">
+  <link rel="shortcut icon" type="image/svg" href="/favicon.svg">
+  <link rel="home" type="application/atom+xml" href="/blog/feed.xml" title="Pyfisch’s Blog">
+  <title>Fuzzing all crates – Pyfisch’s Blog</title>
+</head>
+<body>
+  
+  <header>
+    <a href="/">Pyfisch’s Website</a> &gt; <a href="/blog/">Blog</a>
+  </header>
+  <main>
+    
+  
+  <article>
+  <header>
+    
+      <h1>Fuzzing all crates</h1>
+    
+    <p>
+      written by
+        Pyfisch
+      on <time datetime="2017-03-04">2017-03-04</time>
+    </p>
+  </header>
+  <p>Today Manishearth blogged about <a href="http://manishearth.github.io/blog/2017/03/02/mitigating-underhandedness-fuzzing-your-code/">mitigating underhandedness by fuzzing your code</a>. Underhanded code contains a backdoor hidden by the syntax or semantics of the programming language and should not even be visible to the cautious reviewer. Fuzzing tests a program for random (or not so random) inputs and reports found bugs like memory access errors or panics. Simple fuzzing uses random inputs but modern tools inspect the executable and modify the input to try out more branches and check obscure edge cases. Like all kinds of testing fuzzing is a good way to find underhanded code, but also many kinds of other bugs. Unlike with unit tests no one needs to write all kinds of test cases with a given input and an expected output and will still miss some bugs because of misconceptions about the topic and the impossibility to test every path. Of course fuzzing can’t find other kinds of errors, like all errors not causing illegal memory access or panics but wrong behavior.  The article contains a tutorial on how to use <code>cargo fuzz</code> a new command-line tool to do simple fuzzing with rust crates. If you haven’t already read the article now and try it with one of your own crates (or one from crates.io).</p>
+<p>The crate I selected for fuzzing is <a href="https://pyfisch.org/blog/http-datetime-handling/">httpdate</a>. I blogged about it before. It is very simple and parses a date found in a HTTP header to a <code>SystemTime</code> and is also able to format a time inside a header.</p>
+<p>With the command line utility a fuzzing folder is created. A fuzzer needs a function to test. It has to take a slice of bytes as an input and test it. The function I wrote is very simple: I tries to read the bytes as an UTF-8 string and if this fails it does just nothing. Otherwise it feeds the input to <code>parse_http_date</code>. If this function panics we have found a bug! In case the fuzzer actually produced a valid timestamp it also formats the time again (and checks if a non-empty string is produced).</p>
+<div class="highlight"><pre><span></span><span class="cp">#[export_name=</span><span class="s">&quot;rust_fuzzer_test_input&quot;</span><span class="cp">]</span><span class="w"></span>
+<span class="k">pub</span><span class="w"> </span><span class="k">extern</span><span class="w"> </span><span class="k">fn</span> <span class="nf">go</span><span class="p">(</span><span class="n">data</span>: <span class="kp">&amp;</span><span class="p">[</span><span class="kt">u8</span><span class="p">])</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="kd">let</span><span class="w"> </span><span class="nb">Ok</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">str</span>::<span class="n">from_utf8</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="kd">let</span><span class="w"> </span><span class="nb">Ok</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parse_http_date</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="kd">let</span><span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fmt_http_date</span><span class="p">(</span><span class="n">d</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="n">assert</span><span class="o">!</span><span class="p">(</span><span class="o">!</span><span class="n">o</span><span class="p">.</span><span class="n">is_empty</span><span class="p">());</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+<p>The whole logic is really simple and I had a few tests so I did not really expect many crashes. But I was proven wrong and the fuzzer immediately tried to parse some Ùníçôde characters as a date. This crashed the parser which works with string slices. Take the string <code>"foobar"</code>. Slicing it with <code>s[3..5]</code> gives "ba". But if you try <code>"später"</code> it will panic with a message that 3 is no character boundary. This is the case because <code>'ä'</code> takes up two bytes instead of one like ASCII symbols and rusts slice indices work on bytes and not codepoints. The fix was simple: Just check before parsing whether <code>s.is_ascii()</code> is true. I recompiled the code and started the fuzzer again (cargo fuzz stops after the first bug found). This turned up another bug: Dates which contain some thing like “May 35” will be accepted because I did never check if the individual values where in a valid range! This caused some arithmetic under- and overflows in the conversion from a date with year-month-day-hour-minute-second to seconds since the epoch. Now I check if all numbers are in a valid range. This is a quite obvious bug, I should have been able to spot it earlier. After this the fuzzer found no further bugs. I just added some checks if all required whitespace is present in the date strings and then published a bugfix release 0.2.1 to crates.io.</p>
+<p>Why the title? While many <a href="http://www.rustaceans.org/">Rustaceans</a> say “If it compiles it works” and this mostly true the code will still contain errors. Since fuzzing in Rust is now as easy as writing a single function every library that works with inputs should be fuzzed. In the next days or weeks I will try to find bugs in other crates from the rust ecosystem and write about my findings.</p>
+<p>If you also want to fuzz a crate but don’t know which one the ones listed for the keyword <a href="https://crates.io/search?q=parser">“parser”</a> are usually simple. If they were already fuzzed in the past for example with <a href="https://github.com/rust-fuzz/afl.rs">afl.rs</a> you most likely not find anything but otherwise I am certain there will be crashes in many crates.</p>
+
+  </article>
+
+
+  </main>
+  
+  <footer>
+    &copy; 2020 by Pyfisch.
+  </footer>
+</body>
+</html>

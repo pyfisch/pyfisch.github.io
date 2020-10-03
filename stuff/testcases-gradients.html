@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Testcases for CSS gradients</title>
+<style>
+body {
+  margin: 0px;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+section {
+  width: 300px;
+  height: 120px;
+  border-style: solid;
+  border-width: 2px;
+}
+
+div {
+  width: 100%;
+  height: 100%;
+}
+
+span {
+  position: absolute;
+  margin: 10px;
+  font-family: sans-serif;
+  font-size: 80%;
+  color: white;
+}
+
+section > div {
+  width: 100%;
+}
+
+#test1-grad1 {
+  height: calc(100% / 3);
+  background-image: linear-gradient(to right, black 0%, red 50%, gold 100%);
+}
+
+#test1-grad2 {
+  height: calc(100% / 3);
+  background-image: linear-gradient(to right, black 0%, red, gold);
+}
+
+#test1-grad3 {
+  height: calc(100% / 3);
+  background-image: linear-gradient(to right, black, red, gold);
+}
+
+#test2-grad1 {
+  height: calc(100% / 3);
+  background-image: linear-gradient(to right, yellow 0%, blue 70%, green 70%, green 100%);
+}
+
+#test2-grad2 {
+  height: calc(100% / 3);
+  background-image: linear-gradient(to right, yellow, blue 70%, green 0, green 100%);
+}
+
+#test2-grad3 {
+  height: calc(100% / 3);
+  background-image: linear-gradient(to right, yellow, blue 70%, green 0);
+}
+
+#test3 {
+  height: 100%;
+  background-color: orange;
+  background-image: repeating-linear-gradient(-45deg, transparent, transparent 25px, black 25px, black 50px);
+}
+
+#test4 {
+  height: 100%;
+  background-image: repeating-radial-gradient(lightblue, lightblue 10px, gray 0, gray 20px);
+}
+
+#test5 {
+  width: calc(100% - 2 * 30px);
+  height: calc(100% - 2 * 30px);
+  border-width: 30px;
+  border-style: solid;
+  border-image: repeating-radial-gradient(6px, red, blue) 30;
+}
+
+#test6 {
+  width: calc(100% - 2 * 30px);
+  height: 100%;
+  border-width: 0px 30px;
+  border-style: solid;
+  background: pink;
+  border-image: linear-gradient(to bottom, black, transparent) 1 100%;
+}
+
+#test7 {
+  height: 100%;
+  /* source: https://developer.mozilla.org/de/docs/Web/CSS/radial-gradient */
+  background-image: radial-gradient(ellipse farthest-corner at 45px 45px , #00FFFF 0%, rgba(0, 0, 255, 0) 50%, #0000FF 95%);
+}
+
+#test8-grad1 {
+  width: 50%;
+  height: 100%;
+  float: left;
+  background-image: radial-gradient(10px at right 50%, white 59px, black 60px);
+}
+
+#test8-grad2 {
+  width: 50%;
+  height: 100%;
+  float: right;
+  background-image: radial-gradient(60px at left 50%, black 99%, white 100%);
+}
+
+#test9 {
+  width: 100%;
+  height: 100%;
+  /* source: https://developer.mozilla.org/en-US/docs/Web/CSS/linear-gradient */
+  background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+}
+
+#test10 {
+  height: 100%;
+  /* source: https://drafts.csswg.org/css-images-3/#repeating-gradients Example 14, 3) */
+  background-image: repeating-radial-gradient(circle closest-side at 20px 30px, red, yellow, green 100%, yellow 150%, red 200%)
+}
+
+#test11 {
+  height: 100%;
+  background-image: radial-gradient(circle closest-side, yellow, blue 80%, lawngreen 0);
+}
+
+#test12 {
+  height: 100%;
+  background-image: radial-gradient(circle closest-side, yellow, blue 120%, lawngreen 0);
+}
+
+#test13 {
+  background-color: #000;
+  /* source: https://themarklee.com/2013/11/29/get-started-css-gradients/ */
+  background-image:
+repeating-linear-gradient(transparent, transparent 50px, rgba(0,255,255, .25) 50px,rgba(0,255,255, .25) 100px),
+repeating-linear-gradient(90deg, rgba(0,255,255, .25), rgba(0,255,255, .25) 50px, transparent 50px, transparent 100px),
+repeating-linear-gradient(135deg, transparent, transparent 4px, rgba(255,255,255,.1) 4px, rgba(255,255,255,.1) 8px),
+repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255,255,255,.1) 4px, rgba(255,255,255,.1) 8px),
+repeating-linear-gradient(transparent, transparent 20px, rgba(100,250,250, .2) 20px, rgba(100,250,250, .2) 21px, transparent 21px,transparent 29px, rgba(100,250,250, .2) 29px, rgba(100,250,250, .2) 30px, transparent 30px, transparent 50px),
+repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(100,250,250, .2) 20px, rgba(100,250,250, .2) 21px, transparent 21px,transparent 29px, rgba(100,250,250, .2) 29px, rgba(100,250,250, .2) 30px, transparent 30px, transparent 50px);
+}
+
+#test14 {
+  height: 100%;
+  background-image: linear-gradient(red 30%, blue 0);
+}
+
+#test15 {
+  height: 100%;
+  background-color: black;
+  background-image:
+linear-gradient(to bottom, transparent, transparent 30%, rgba(255, 255, 255, .5) 0, rgba(255, 255, 255, .5) 50%, transparent 0),
+linear-gradient(to right, transparent, transparent 30%, rgba(255, 255, 255, .5) 0, rgba(255, 255, 255, .5) 50%, transparent 0);
+}
+</style>
+</head>
+<body>
+  <section>
+    <span>Testcase 1</span>
+    <div id="test1-grad1"></div>
+    <div id="test1-grad2"></div>
+    <div id="test1-grad3"></div>
+  </section>
+  <section>
+    <span>Testcase 2</span>
+    <div id="test2-grad1"></div>
+    <div id="test2-grad2"></div>
+    <div id="test2-grad3"></div>
+  </section>
+  <section>
+    <span>Testcase 3</span>
+    <div id="test3"></div>
+  </section>
+  <section>
+    <span>Testcase 4</span>
+    <div id="test4"></div>
+  </section>
+  <section>
+    <span>Testcase 5</span>
+    <div id="test5"></div>
+  </section>
+  <section>
+    <span>Testcase 6</span>
+    <div id="test6"></div>
+  </section>
+  <section>
+    <span>Testcase 7</span>
+    <div id="test7"></div>
+  </section>
+  <section>
+    <span>Testcase 8</span>
+    <div>
+      <div id="test8-grad1"></div>
+      <div id="test8-grad2"></div>
+    </div>
+  </section>
+  <section>
+    <span>Testcase 9</span>
+    <div id="test9"></div>
+  </section>
+  <section>
+    <span>Testcase 10</span>
+    <div id="test10"></div>
+  </section>
+  <section>
+    <span>Testcase 11</span>
+    <div id="test11"></div>
+  </section>
+  <section>
+    <span>Testcase 12</span>
+    <div id="test12"></div>
+  </section>
+  <section>
+    <span>Testcase 13</span>
+    <div id="test13"></div>
+  </section>
+  <section>
+    <span>Testcase 14</span>
+    <div id="test14"></div>
+  </section>
+  <section>
+    <span>Testcase 15</span>
+    <div id="test15"></div>
+  </section>
+</body>
+</html>

@@ -78,7 +78,7 @@ epoch (sub seconds are discarded in HTTP):</p>
 <span class="w">  </span><span class="p">.</span><span class="n">as_secs</span><span class="p">();</span><span class="w"> </span><span class="c1">// Convert the duration to an integer.</span>
 </pre></div>
 <p>A <code>SystemTime</code> is constructed by adding a duration to the epoch:</p>
-<div class="highlight"><pre><span></span><span class="kd">let</span><span class="w"> </span><span class="n">time</span><span class="o">:</span><span class="w"> </span><span class="n">SystemTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UNIX_EPOCH</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Duration</span><span class="o">::</span><span class="n">from_secs</span><span class="p">(</span><span class="mi">1482490056</span><span class="p">);</span><span class="w"></span>
+<div class="highlight"><pre><span></span><span class="kd">let</span><span class="w"> </span><span class="n">time</span>: <span class="nc">SystemTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UNIX_EPOCH</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Duration</span>::<span class="n">from_secs</span><span class="p">(</span><span class="mi">1482490056</span><span class="p">);</span><span class="w"></span>
 </pre></div>
 <h2>Internals</h2>
 <p>The crate converts strings to an internal <code>DateTime</code> struct first. This structure has
@@ -93,7 +93,7 @@ is more compex.</p>
   </main>
   
   <footer>
-    &copy; 2016 by Pyfisch.
+    &copy; 2020 by Pyfisch.
   </footer>
 </body>
 </html>

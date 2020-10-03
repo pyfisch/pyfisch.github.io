@@ -2,6 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://pyfisch.org/</loc></url>
   <url><loc>https://pyfisch.org/blog/</loc></url>
+  <url><loc>https://pyfisch.org/blog/http-with-url/</loc></url>
+  <url><loc>https://pyfisch.org/blog/rendering-vector-map-tiles/</loc></url>
+  <url><loc>https://pyfisch.org/blog/fuzzing-all-crates/</loc></url>
   <url><loc>https://pyfisch.org/blog/http-datetime-handling/</loc></url>
   <url><loc>https://pyfisch.org/blog/tokio-echo-server/</loc></url>
   <url><loc>https://pyfisch.org/about/</loc></url>
